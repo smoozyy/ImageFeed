@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y7I-ou-wft">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yla-G5-58P">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -92,13 +92,13 @@
                             <constraint firstItem="twx-eR-dwX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zbz-oS-qHW"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="7h1-rM-UfJ"/>
+                    <navigationItem key="navigationItem" id="6Nm-hN-BsB"/>
                     <connections>
                         <outlet property="tableView" destination="twx-eR-dwX" id="gN6-zF-rvm"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
+            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="gwB-DQ-gWV">
@@ -107,11 +107,13 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="AlY-ME-z9l">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" name="YP Black (iOS)"/>
                         <color key="selectedImageTintColor" name="YP White (iOS)"/>
+                        <tabBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" name="YP Black (iOS)"/>
+                        </tabBarAppearance>
                     </tabBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="WvM-Df-Z40"/>
+                        <segue destination="slm-tu-XPG" kind="relationship" relationship="viewControllers" id="WvM-Df-Z40"/>
                         <segue destination="o9Y-DN-RTX" kind="relationship" relationship="viewControllers" id="L4F-HX-z5j"/>
                     </connections>
                 </tabBarController>
@@ -189,8 +191,62 @@
             </objects>
             <point key="canvasLocation" x="-283" y="-546"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="91D-VN-5jp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="slm-tu-XPG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="7h1-rM-UfJ"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zVs-dg-aa5">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" name="YP White (iOS)"/>
+                        <color key="barTintColor" name="YP White (iOS)"/>
+                        <navigationBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" name="YP Black (iOS)"/>
+                        </navigationBarAppearance>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="KW0-21-8RC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Ug-gT-Sdo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
+        </scene>
+        <!--Single Image View Controller-->
+        <scene sceneID="UE9-8R-0hH">
+            <objects>
+                <viewController id="yla-G5-58P" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wja-AE-532">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-Ot-aUT">
+                                <rect key="frame" x="16" y="118" width="361" height="666"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="q2E-px-NX4"/>
+                        <color key="backgroundColor" name="YP Black (iOS)"/>
+                        <constraints>
+                            <constraint firstItem="yYX-Ot-aUT" firstAttribute="leading" secondItem="wja-AE-532" secondAttribute="leadingMargin" id="ZFX-BI-914"/>
+                            <constraint firstItem="yYX-Ot-aUT" firstAttribute="trailing" secondItem="wja-AE-532" secondAttribute="trailingMargin" id="d8n-AP-bmb"/>
+                            <constraint firstItem="yYX-Ot-aUT" firstAttribute="bottom" secondItem="wja-AE-532" secondAttribute="bottomMargin" id="hBt-Ma-IOk"/>
+                            <constraint firstItem="yYX-Ot-aUT" firstAttribute="top" secondItem="wja-AE-532" secondAttribute="topMargin" id="w1W-m1-XLe"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="yYX-Ot-aUT" id="A4I-20-K44"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YZV-cl-D49" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="605" y="-546"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="0" width="1600" height="1059"/>
         <image name="Image" width="1803" height="2298"/>
         <image name="exit_icon" width="44" height="44"/>
         <image name="like" width="44" height="44"/>
