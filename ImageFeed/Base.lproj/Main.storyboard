@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y7I-ou-wft">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -11,6 +11,7 @@
         <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
@@ -91,13 +92,32 @@
                             <constraint firstItem="twx-eR-dwX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zbz-oS-qHW"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="7h1-rM-UfJ"/>
                     <connections>
                         <outlet property="tableView" destination="twx-eR-dwX" id="gN6-zF-rvm"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="gwB-DQ-gWV">
+            <objects>
+                <tabBarController id="Y7I-ou-wft" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="AlY-ME-z9l">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="YP Black (iOS)"/>
+                        <color key="selectedImageTintColor" name="YP White (iOS)"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="WvM-Df-Z40"/>
+                        <segue destination="o9Y-DN-RTX" kind="relationship" relationship="viewControllers" id="L4F-HX-z5j"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ov6-Sv-Ox9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1054" y="131"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="kGi-Q3-fGT">
@@ -145,9 +165,6 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="exit_icon"/>
-                                <connections>
-                                    <action selector="didTapExitButton:" destination="o9Y-DN-RTX" eventType="touchUpInside" id="Fsw-ut-WTc"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9Ep-M4-YQZ"/>
@@ -159,6 +176,7 @@
                             <constraint firstItem="AzQ-Qn-p9p" firstAttribute="top" secondItem="9Ep-M4-YQZ" secondAttribute="top" id="VA3-YS-NTf"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="l8c-4y-pbL"/>
                     <connections>
                         <outlet property="descriptionLabel" destination="Dx5-G3-VaO" id="6f5-FN-2KA"/>
                         <outlet property="exitButton" destination="hAi-C3-I9r" id="iU5-z4-Zjb"/>
@@ -177,6 +195,8 @@
         <image name="exit_icon" width="44" height="44"/>
         <image name="like" width="44" height="44"/>
         <image name="profile_icon" width="70" height="70"/>
+        <image name="tab_editorial_active" width="75" height="49"/>
+        <image name="tab_profile_active" width="75" height="49"/>
         <namedColor name="YP Background (iOS)">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

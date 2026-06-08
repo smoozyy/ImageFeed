@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileViewController {
+final class ProfileViewController: UIViewController {
     //MARK: Outlets
     
     @IBOutlet var profileImageView: UIImageView!
@@ -9,7 +9,9 @@ final class ProfileViewController {
     @IBOutlet var exitButton: UIButton!
     @IBOutlet var descriptionLabel: UILabel!
     
-    @IBAction func didTapExitButton() {
+    //MARK: Actions
+    
+    
         
-    }
+    
 }
