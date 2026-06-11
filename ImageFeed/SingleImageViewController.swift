@@ -5,7 +5,14 @@ final class SingleImageViewController: UIViewController {
     //MARK: Outlets
     
     @IBOutlet private var imageView: UIImageView!
-        
+    
+    //MARK: Actions
+    
+    
+    @IBAction private func didTapBackButton(_ sender: UIButton!) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     //MARK: Properties
     
     var image: UIImage? {
