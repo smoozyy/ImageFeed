@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yla-G5-58P">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y7I-ou-wft">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -95,6 +95,7 @@
                     <navigationItem key="navigationItem" id="6Nm-hN-BsB"/>
                     <connections>
                         <outlet property="tableView" destination="twx-eR-dwX" id="gN6-zF-rvm"/>
+                        <segue destination="yla-G5-58P" kind="show" identifier="ShowSingleImage" id="tA2-Wb-3uo"/>
                     </connections>
                 </viewController>
             </objects>
@@ -224,7 +225,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-Ot-aUT">
-                                <rect key="frame" x="16" y="118" width="361" height="666"/>
+                                <rect key="frame" x="16" y="172" width="361" height="563"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="q2E-px-NX4"/>
@@ -236,6 +237,7 @@
                             <constraint firstItem="yYX-Ot-aUT" firstAttribute="top" secondItem="wja-AE-532" secondAttribute="topMargin" id="w1W-m1-XLe"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="e94-Cz-4n0"/>
                     <connections>
                         <outlet property="imageView" destination="yYX-Ot-aUT" id="A4I-20-K44"/>
                     </connections>
