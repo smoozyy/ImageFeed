@@ -11,7 +11,6 @@
         <!--ImageList-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController title="ImageList" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
@@ -99,6 +98,7 @@
                         <segue destination="yla-G5-58P" kind="presentation" identifier="ShowSingleImage" id="tA2-Wb-3uo"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-68" y="177"/>
         </scene>
@@ -201,10 +201,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-Ot-aUT">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCf-e6-DaL">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T4N-bF-XFj">
+                                <rect key="frame" x="0.0" y="0.0" width="1640" height="1099"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-Ot-aUT">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4JW-ZB-97b" userLabel="shared_button">
+                                        <rect key="frame" x="171.66666666666666" y="751" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="3uX-IZ-47m"/>
+                                            <constraint firstAttribute="width" constant="50" id="CjI-fP-4HE"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="shared_button"/>
+                                        <connections>
+                                            <action selector="didTapShareButton:" destination="yla-G5-58P" eventType="touchUpInside" id="oxZ-n8-sEs"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="sfk-GE-I9B"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="SAS-sP-cSa"/>
+                                <connections>
+                                    <outlet property="delegate" destination="yla-G5-58P" id="ue0-Cd-ez3"/>
+                                </connections>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fCf-e6-DaL" userLabel="back_button">
                                 <rect key="frame" x="8" y="67" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="8Gy-6Z-8Wh"/>
@@ -220,18 +243,21 @@
                         <viewLayoutGuide key="safeArea" id="q2E-px-NX4"/>
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
-                            <constraint firstAttribute="leading" secondItem="yYX-Ot-aUT" secondAttribute="leading" id="ZFX-BI-914"/>
-                            <constraint firstAttribute="trailing" secondItem="yYX-Ot-aUT" secondAttribute="trailing" id="d8n-AP-bmb"/>
+                            <constraint firstItem="T4N-bF-XFj" firstAttribute="leading" secondItem="q2E-px-NX4" secondAttribute="leading" id="04g-30-g98"/>
+                            <constraint firstItem="T4N-bF-XFj" firstAttribute="trailing" secondItem="q2E-px-NX4" secondAttribute="trailing" id="Mkq-md-FQy"/>
+                            <constraint firstItem="4JW-ZB-97b" firstAttribute="centerX" secondItem="q2E-px-NX4" secondAttribute="centerX" id="bwt-eR-Kit"/>
                             <constraint firstItem="fCf-e6-DaL" firstAttribute="leading" secondItem="q2E-px-NX4" secondAttribute="leading" constant="8" id="eMv-PY-EWE"/>
-                            <constraint firstAttribute="bottom" secondItem="yYX-Ot-aUT" secondAttribute="bottom" id="hBt-Ma-IOk"/>
                             <constraint firstItem="fCf-e6-DaL" firstAttribute="top" secondItem="q2E-px-NX4" secondAttribute="top" constant="8" id="iyS-51-iBC"/>
-                            <constraint firstAttribute="top" secondItem="yYX-Ot-aUT" secondAttribute="top" id="w1W-m1-XLe"/>
+                            <constraint firstItem="T4N-bF-XFj" firstAttribute="bottom" secondItem="wja-AE-532" secondAttribute="bottom" id="nQK-dP-PaH"/>
+                            <constraint firstItem="q2E-px-NX4" firstAttribute="bottom" secondItem="4JW-ZB-97b" secondAttribute="bottom" constant="17" id="vWf-H8-wZ1"/>
+                            <constraint firstItem="T4N-bF-XFj" firstAttribute="top" secondItem="wja-AE-532" secondAttribute="top" id="z6v-Up-h8C"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="KYq-Qf-6h6"/>
                     <navigationItem key="navigationItem" id="e94-Cz-4n0"/>
                     <connections>
                         <outlet property="imageView" destination="yYX-Ot-aUT" id="A4I-20-K44"/>
+                        <outlet property="scrollView" destination="T4N-bF-XFj" id="0iF-tF-hgd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YZV-cl-D49" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -246,6 +272,7 @@
         <image name="exit_icon" width="44" height="44"/>
         <image name="like" width="44" height="44"/>
         <image name="profile_icon" width="70" height="70"/>
+        <image name="shared_button" width="50" height="50"/>
         <image name="tab_editorial_active" width="75" height="49"/>
         <image name="tab_profile_active" width="75" height="49"/>
         <namedColor name="YP Background (iOS)">
