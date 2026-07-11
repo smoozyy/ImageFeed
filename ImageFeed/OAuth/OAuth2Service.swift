@@ -19,7 +19,7 @@ final class OAuth2Service {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
             return nil
         }
-
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "client_secret", value: Constants.secretKey),
@@ -27,16 +27,16 @@ final class OAuth2Service {
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "grant_type", value: "authorization_code"),
         ]
-
+        
         guard let authTokenUrl = urlComponents.url else {
             return nil
         }
-
+        
         var request = URLRequest(url: authTokenUrl)
         request.httpMethod = "POST"
         return request
     }
-     
+    
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(NetworkError.invalidRequest))

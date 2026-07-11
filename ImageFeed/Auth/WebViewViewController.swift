@@ -37,6 +37,12 @@ final class WebViewViewController: UIViewController{
         updateProgress()
     }
     
+    //MARK: deinit
+    
+    deinit{
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
+    }
+    
     //MARK: Private Methods
     
     private func loadAuthView() {
