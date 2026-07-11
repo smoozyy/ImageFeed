@@ -32,7 +32,7 @@ final class SingleImageViewController: UIViewController {
         }
         let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [unwrappedImage], applicationActivities: nil)
         activityViewController.activityItemsConfiguration = [
-            UIActivity.ActivityType.message
+            UIActivity.ActivityType.airDrop
         ] as? UIActivityItemsConfigurationReading
         activityViewController.excludedActivityTypes = [
             UIActivity.ActivityType.postToFacebook,
@@ -41,7 +41,8 @@ final class SingleImageViewController: UIViewController {
             UIActivity.ActivityType.sharePlay,
             UIActivity.ActivityType.airDrop,
             UIActivity.ActivityType.collaborationCopyLink,
-            UIActivity.ActivityType.print
+            UIActivity.ActivityType.print,
+            UIActivity.ActivityType.airDrop
         ]
         activityViewController.isModalInPresentation = true
         self.present(activityViewController, animated: true, completion: nil)

@@ -32,6 +32,8 @@ final class WebViewViewController: UIViewController{
         
         webView.navigationDelegate = self
         
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        
         updateProgress()
     }
     
@@ -73,23 +75,6 @@ final class WebViewViewController: UIViewController{
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        updateProgress()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
-    
 }
 
 //MARK: Extensions
@@ -101,7 +86,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
-            //TODO: process code
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
