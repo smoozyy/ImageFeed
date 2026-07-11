@@ -15,9 +15,22 @@
 		3AD8232F2FCC1FD3007FC142 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3AB9D83930022622005AD2FE /* Exceptions for "ImageFeed" folder in "ImageFeed" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3AD8232E2FCC1FD3007FC142 /* ImageFeed */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3AD823312FCC1FD3007FC142 /* ImageFeed */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3AB9D83930022622005AD2FE /* Exceptions for "ImageFeed" folder in "ImageFeed" target */,
+			);
 			path = ImageFeed;
 			sourceTree = "<group>";
 		};
