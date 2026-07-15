@@ -47,6 +47,7 @@ final class WebViewViewController: UIViewController{
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
+            print(NetworkError.invalidRequest)
             return
         }
         urlComponents.queryItems = [

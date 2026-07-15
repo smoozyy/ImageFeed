@@ -9,6 +9,7 @@ final class AuthViewController: UIViewController {
     //MARK: Properties
     
     let showWebViewSegueIdentifier = "ShowWebView"
+    private let oauth2TokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     
     //MARK: delegate
@@ -48,10 +49,11 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        oauth2Service.fetchOAuthToken(code: code) { result in
+        oauth2Service.fetchAuthToken(code: code) { [weak self] result in
+            guard let self = self else { return }
             switch result{
             case .success(let token):
-                vc.dismiss(animated: true)
+                self.oauth2TokenStorage.token = token
                 self.delegate?.didAuthenticate(self)
             case .failure(let error):
                 print(error)

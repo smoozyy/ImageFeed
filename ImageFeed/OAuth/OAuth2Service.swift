@@ -17,6 +17,7 @@ final class OAuth2Service {
     
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
+            print(NetworkError.invalidRequest)
             return nil
         }
         
@@ -29,6 +30,7 @@ final class OAuth2Service {
         ]
         
         guard let authTokenUrl = urlComponents.url else {
+            print(NetworkError.invalidRequest)
             return nil
         }
         
@@ -37,7 +39,7 @@ final class OAuth2Service {
         return request
     }
     
-    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(NetworkError.invalidRequest))
             return
