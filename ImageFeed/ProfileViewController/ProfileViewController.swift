@@ -53,6 +53,7 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             //MARK: imageViewConstraints
+            
             imageView.widthAnchor.constraint(equalToConstant: 70),
             imageView.heightAnchor.constraint(equalToConstant: 70),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16 ),
@@ -76,7 +77,7 @@ final class ProfileViewController: UIViewController {
             
         ])
         
-    
+        
     }
     
     
@@ -87,7 +88,7 @@ final class ProfileViewController: UIViewController {
     @objc private func didTapButton() {
     }
     
-
-        
+    
+    
     
 }
