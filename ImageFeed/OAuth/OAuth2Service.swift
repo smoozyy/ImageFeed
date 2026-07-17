@@ -8,10 +8,19 @@ struct OAuthTokenResponseBody: Decodable {
     }
 }
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
+    
+    //MARK: Properties
     static let shared = OAuth2Service()
     private init() {
     }
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private var lastCode: String?
     
     //MARK: Private methods
     
@@ -40,11 +49,26 @@ final class OAuth2Service {
     }
     
     func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        if task != nil{
+            if lastCode != code {
+                task?.cancel()
+            } else {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        } else {
+            if lastCode == code {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        }
+        lastCode = code
         guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(NetworkError.invalidRequest))
+            completion(.failure(AuthServiceError.invalidRequest))
             return
         }
-        let task = URLSession.shared.data(for: request) { result in
+        let task = URLSession.shared.data(for: request) { [weak self] result in
             switch result{
             case .failure(let error):
                 print(error)
@@ -60,8 +84,10 @@ final class OAuth2Service {
                     completion(.failure(error))
                 }
             }
-            
+            self?.task = nil
+            self?.lastCode = nil
         }
+        self.task = task
         task.resume()
     }
     
