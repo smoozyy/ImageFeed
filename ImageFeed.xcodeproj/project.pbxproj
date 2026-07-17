@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A1D2FAA2FF90FBD00F1EFC4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1D2FA92FF90FBD00F1EFC4 /* WebKit.framework */; };
+		3AD037F6300A10D300FB3095 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3AD037F5300A10D300FB3095 /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A1D2FAA2FF90FBD00F1EFC4 /* WebKit.framework in Frameworks */,
+				3AD037F6300A10D300FB3095 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +95,7 @@
 			);
 			name = ImageFeed;
 			packageProductDependencies = (
+				3AD037F5300A10D300FB3095 /* ProgressHUD */,
 			);
 			productName = ImageFeed;
 			productReference = 3AD8232F2FCC1FD3007FC142 /* ImageFeed.app */;
@@ -122,6 +125,9 @@
 			);
 			mainGroup = 3AD823262FCC1FD3007FC142;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3AD037F4300A10D300FB3095 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3AD823302FCC1FD3007FC142 /* Products */;
 			projectDirPath = "";
@@ -366,6 +372,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3AD037F4300A10D300FB3095 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3AD037F5300A10D300FB3095 /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AD037F4300A10D300FB3095 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3AD823272FCC1FD3007FC142 /* Project object */;
 }
