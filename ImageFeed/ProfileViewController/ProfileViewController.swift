@@ -7,15 +7,13 @@ final class ProfileViewController: UIViewController {
     private var nameLabel: UILabel?
     private var profileLabel: UILabel?
     private var descriptionLabel: UILabel?
-    
-    //MARK: Outlets
-    
+    private let profileService = ProfileService.shared
     
     //MARK: viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+            
         let nameLabel = UILabel()
         let profileLabel = UILabel()
         let descriptionLabel = UILabel()
@@ -34,11 +32,6 @@ final class ProfileViewController: UIViewController {
         nameLabel.font = UIFont(name:"SFPro-Bold" , size: 23)
         profileLabel.font = UIFont(name: "SFPro-Regular", size: 13)
         descriptionLabel.font = UIFont(name: "SFPro-Regular", size: 13)
-        
-        nameLabel.text = "Екатирина Петрова"
-        profileLabel.text = "@ekatirina_nov"
-        descriptionLabel.text = "Hello, world!"
-        
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -77,6 +70,14 @@ final class ProfileViewController: UIViewController {
             
         ])
         
+        self.nameLabel = nameLabel
+        self.profileLabel = profileLabel
+        self.descriptionLabel = descriptionLabel
+        
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        }
+        
         
     }
     
@@ -84,6 +85,18 @@ final class ProfileViewController: UIViewController {
     
     
     //MARK: Private Methods
+    
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel?.text = profile.name.isEmpty
+            ? "Имя не указано"
+            : profile.name
+        profileLabel?.text = profile.loginName.isEmpty
+            ? "@неизвестный_пользователь"
+            : profile.loginName
+        descriptionLabel?.text = (profile.bio?.isEmpty ?? true)
+            ? "Профиль не заполнен"
+            : profile.bio
+    }
     
     @objc private func didTapButton() {
     }
