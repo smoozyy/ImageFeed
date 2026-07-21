@@ -4,6 +4,7 @@ final class ProfileViewController: UIViewController {
     
     //MARK: Propetries
     
+    private var profileImageServiceObserver: NSObjectProtocol?
     private var nameLabel: UILabel?
     private var profileLabel: UILabel?
     private var descriptionLabel: UILabel?
@@ -13,6 +14,16 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main,
+        ) { [weak self] _ in
+            guard let self else {return}
+            self.updateAvatar()
+        }
+        updateAvatar()
             
         let nameLabel = UILabel()
         let profileLabel = UILabel()
@@ -96,6 +107,15 @@ final class ProfileViewController: UIViewController {
         descriptionLabel?.text = (profile.bio?.isEmpty ?? true)
             ? "Профиль не заполнен"
             : profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else {return}
+        
+        //TODO: code
     }
     
     @objc private func didTapButton() {

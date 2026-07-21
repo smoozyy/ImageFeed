@@ -10,7 +10,7 @@ final class AuthViewController: UIViewController {
     //MARK: Properties
     
     let showWebViewSegueIdentifier = "ShowWebView"
-    private let oauth2TokenStorage = OAuth2TokenStorage()
+    private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let oauth2Service = OAuth2Service.shared
     
     //MARK: delegate

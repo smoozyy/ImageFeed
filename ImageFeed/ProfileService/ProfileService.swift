@@ -30,7 +30,7 @@ final class ProfileService {
     }
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
-    private (set) var profile: Profile?
+    private(set) var profile: Profile?
     //MARK: Method's
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
@@ -63,6 +63,7 @@ final class ProfileService {
             }
             self?.task = nil
         }
+        
         
         self.task = task
         task.resume()

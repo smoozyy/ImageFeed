@@ -4,7 +4,7 @@ final class SplashViewController: UIViewController {
     
     //MARK: Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    private let storage = OAuth2TokenStorage()
+    private let storage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     
     //MARK: LifeCycle
@@ -69,12 +69,18 @@ extension SplashViewController: AuthViewControllerDelegate {
                 return
             }
             switch result {
-            case .success:
+            case .success(let profile):
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
                 self.switchToTabBarController()
             case.failure(let error):
-                print("Failed to get profile")
+                print("Failed to get profile\(error)")
                 break
             }
         }
+        
     }
+    
+    
+    
+    
 }
