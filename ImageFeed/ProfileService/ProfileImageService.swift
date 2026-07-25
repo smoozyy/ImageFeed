@@ -1,4 +1,5 @@
 import Foundation
+import Kingfisher
 
 struct UserResult: Codable {
     let profileImage: SmallImage

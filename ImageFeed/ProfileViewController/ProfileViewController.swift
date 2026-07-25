@@ -1,9 +1,10 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     //MARK: Propetries
-    
+    private var avatarImageView: UIImageView?
     private var profileImageServiceObserver: NSObjectProtocol?
     private var nameLabel: UILabel?
     private var profileLabel: UILabel?
@@ -23,13 +24,11 @@ final class ProfileViewController: UIViewController {
             guard let self else {return}
             self.updateAvatar()
         }
-        updateAvatar()
             
         let nameLabel = UILabel()
         let profileLabel = UILabel()
         let descriptionLabel = UILabel()
-        let profileImage = UIImage(named: "profile_icon")
-        let imageView = UIImageView(image: profileImage)
+        let avatarImageView = UIImageView()
         let exitButton = UIButton.systemButton(
             with: UIImage(named: "exit_icon") ?? UIImage(),
             target: self,
@@ -47,9 +46,9 @@ final class ProfileViewController: UIViewController {
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         exitButton.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(exitButton)
-        view.addSubview(imageView)
+        view.addSubview(avatarImageView)
         view.addSubview(nameLabel)
         view.addSubview(profileLabel)
         view.addSubview(descriptionLabel)
@@ -58,21 +57,21 @@ final class ProfileViewController: UIViewController {
             
             //MARK: imageViewConstraints
             
-            imageView.widthAnchor.constraint(equalToConstant: 70),
-            imageView.heightAnchor.constraint(equalToConstant: 70),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16 ),
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 70),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 70),
+            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16 ),
+            avatarImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
             
             //MARK: exitButtonConstraints
             
             exitButton.widthAnchor.constraint(equalToConstant: 44),
             exitButton.heightAnchor.constraint(equalToConstant: 44),
             exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            exitButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            exitButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             
             //MARK: labelsConstraints
             
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             profileLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             profileLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -81,6 +80,7 @@ final class ProfileViewController: UIViewController {
             
         ])
         
+        self.avatarImageView = avatarImageView
         self.nameLabel = nameLabel
         self.profileLabel = profileLabel
         self.descriptionLabel = descriptionLabel
@@ -89,6 +89,7 @@ final class ProfileViewController: UIViewController {
             updateProfileDetails(profile: profile)
         }
         
+        updateAvatar()
         
     }
     
@@ -115,7 +116,36 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else {return}
         
-        //TODO: code
+        print("imageURL: \(url)")
+        
+        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        
+        
+        
+        let proccessor = RoundCornerImageProcessor(cornerRadius: 35)
+        avatarImageView?.kf.indicatorType = .activity
+        avatarImageView?.kf.setImage(
+            with: url,
+            placeholder: placeholderImage,
+            options: [
+                .processor(proccessor),
+                .scaleFactor(UIScreen.main.scale), /// учитываем масштаб экрана
+                .cacheOriginalImage, /// кэшируем изображение
+                .forceRefresh /// игнорируем кэш, чтобы обновить
+            ]) { result in
+                switch result {
+                case .success(let value):
+                    print(value.image)
+                    print(value.cacheType)
+                    print(value.source)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        
+        
     }
     
     @objc private func didTapButton() {
