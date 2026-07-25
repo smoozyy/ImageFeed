@@ -1,5 +1,6 @@
 import UIKit
 import WebKit
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
     static let shared = OAuth2TokenStorage()
@@ -7,10 +8,14 @@ final class OAuth2TokenStorage {
     }
     var token: String? {
         get {
-            UserDefaults.standard.string(forKey: "token")
+            KeychainWrapper.standard.string(forKey: "token")
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: "token")
+            guard let newValue else {
+                KeychainWrapper.standard.removeObject(forKey: "token")
+                return
+            }
+            KeychainWrapper.standard.set(newValue, forKey: "token")
         }
     }
     
