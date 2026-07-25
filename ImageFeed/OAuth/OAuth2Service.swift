@@ -21,6 +21,7 @@ final class OAuth2Service {
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
+    private let oauth2TokenStorage = OAuth2TokenStorage.shared
     
     //MARK: Private methods
     
@@ -68,22 +69,17 @@ final class OAuth2Service {
             completion(.failure(AuthServiceError.invalidRequest))
             return
         }
-        let task = URLSession.shared.data(for: request) { [weak self] result in
-            switch result{
-            case .failure(let error):
-                print(error)
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            switch result {
+            case . success(let body):
+                let token = body.accessToken
+                self?.oauth2TokenStorage.token = token
+                completion(.success(token))
+            case . failure(let error):
+                print("[fetchAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let token = response.accessToken
-                    completion(.success(token))
-                } catch {
-                    print(error)
-                    completion(.failure(error))
-                }
             }
+            
             self?.task = nil
             self?.lastCode = nil
         }

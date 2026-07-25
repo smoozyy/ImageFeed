@@ -14,7 +14,9 @@ final class WebViewViewController: UIViewController{
     @IBOutlet private var progressView: UIProgressView!
     @IBOutlet private var webView: WKWebView!
     
-    //MARK: Actions
+    //MARK: Properties
+    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     
     //MARK: Propetries
@@ -28,21 +30,26 @@ final class WebViewViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self else { return }
+                 self.updateProgress()
+             }
+        )
+        
+        
+        
         loadAuthView()
         
         webView.navigationDelegate = self
         
-        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         
         updateProgress()
     }
-    
-    //MARK: deinit
-    
-    deinit{
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-    }
-    
+
     //MARK: Private Methods
     
     private func loadAuthView() {
@@ -62,19 +69,6 @@ final class WebViewViewController: UIViewController{
         }
         let request = URLRequest(url: url)
         webView.load(request)
-    }
-    
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
     
     private func updateProgress() {

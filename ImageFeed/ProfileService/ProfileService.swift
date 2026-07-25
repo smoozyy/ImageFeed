@@ -25,12 +25,14 @@ struct Profile {
 final class ProfileService {
     
     //MARK: Properties
+    
     static let shared = ProfileService()
     private init() {
     }
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private(set) var profile: Profile?
+    
     //MARK: Method's
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
@@ -41,24 +43,19 @@ final class ProfileService {
             return
         }
         
-        let task = urlSession.data(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
-                    
-                    let profile = Profile(
-                        username: profileResult.username,
-                        name: profileResult.firstName,
-                        loginName: "@\(profileResult.username)",
-                        bio: profileResult.bio
-                    )
-                    self?.profile = profile
-                    completion(.success(profile))
-                } catch {
-                    completion(.failure(error))
-                }
+            case .success(let profileResult):
+                let profile = Profile(
+                    username: profileResult.username,
+                    name: profileResult.firstName,
+                    loginName: "@\(profileResult.username)",
+                    bio: profileResult.bio
+                )
+                self?.profile = profile
+                completion(.success(profile))
             case .failure(let error):
+                print("[fetch profile]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
             self?.task = nil
