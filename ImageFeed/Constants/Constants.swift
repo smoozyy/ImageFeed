@@ -1,4 +1,3 @@
-
 enum Constants {
     static let accessKey = "GgDgjm7RLTq3x_GgOoBiPsoK5q1iMoZlXKn8TLyhB7E"
     static let secretKey = "KZoIE3K_zyD2q1mdx8cbjXAd2JLZcJTGqXj9ykV9ogY"
