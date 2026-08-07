@@ -1,5 +1,9 @@
 import UIKit
 
+struct LikeResultWrapper: Decodable {
+    let photo: PhotoResult
+}
+
 struct Photo {
     let id: String
     let size: CGSize
@@ -58,6 +62,11 @@ final class ImagesListService {
     
     //MARK: Properties
     
+    private var oauth2TokenStorage =  OAuth2TokenStorage.shared
+    private var likeTask: URLSessionTask?
+    static let shared = ImagesListService()
+    private init() {
+    }
     private let urlSession = URLSession.shared
     private(set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
@@ -67,6 +76,23 @@ final class ImagesListService {
     //...
     
     //MARK: Private Method's
+    
+    func makePhotosRequest(page: Int, token: String) -> URLRequest? {
+        guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
+            return nil
+        }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "per_page", value: "10")
+        ]
+        guard let url = urlComponents.url else {
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
     
     func fetchPhotosNextPage() {
         if task != nil {
@@ -88,7 +114,15 @@ final class ImagesListService {
                 switch result {
                 case .success(let photoResults):
                     let newPhotos = photoResults.map { Photo(from: $0) }
-                    self.photos.append(contentsOf: newPhotos)
+                    for photo in newPhotos {
+                        let isDuplicate = self.photos.contains { existingPhoto in
+                            existingPhoto.id == photo.id
+                        }
+                        
+                        if !isDuplicate {
+                            self.photos.append(photo)
+                        }
+                    }
                     self.lastLoadedPage = nextPage
                     NotificationCenter.default.post(
                         name: ImagesListService.didChangeNotification,
@@ -101,21 +135,56 @@ final class ImagesListService {
         task?.resume()
     }
     
-    func makePhotosRequest(page: Int, token: String) -> URLRequest? {
-        guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
-            return nil
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        likeTask?.cancel()
+        guard let token = oauth2TokenStorage.token else {
+            print("[ImagesListService.changeLike]: Error - Failed to get token")
+            return
         }
-        urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: "\(page)"),
-            URLQueryItem(name: "per_page", value: "10")
-        ]
-        guard let url = urlComponents.url else {
+        guard let request = makeLikeRequest(token: token, photoId: photoId, isLike: isLike) else {
+            return
+        }
+        likeTask = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResultWrapper, Error>) in
+            guard let self else {return}
+            DispatchQueue.main.async {
+                self.likeTask = nil
+                switch result {
+                    case .success(let wrapper):
+                    if let index = self.photos.firstIndex(where: { $0.id == photoId}){
+                        let updatedPhotoResult = wrapper.photo 
+                        let newPhoto = Photo(from: updatedPhotoResult)
+                        self.photos[index] = newPhoto
+                    }
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+                
+            }
+        }
+        likeTask?.resume()
+    }
+    
+    func makeLikeRequest(token: String, photoId: String, isLike: Bool) -> URLRequest? {
+        guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
             return nil
         }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        if isLike == true {
+            request.httpMethod = "POST"
+        } else {
+            request.httpMethod = "DELETE"
+        }
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+    func clean() {
+        photos = []
+        likeTask?.cancel()
+        likeTask = nil
+        task?.cancel()
+        task = nil
+        lastLoadedPage = nil
     }
 }
 
