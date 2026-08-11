@@ -11,6 +11,7 @@ final class ProfileViewController: UIViewController {
     private var descriptionLabel: UILabel?
     private let profileService = ProfileService.shared
     private var profileLogoutService = ProfileLogoutService.shared
+    private var animationLayers = Set<CALayer>()
     
     //MARK: viewDidLoad
     
@@ -98,6 +99,38 @@ final class ProfileViewController: UIViewController {
     
     
     //MARK: Private Methods
+    
+    private func createGradientLayer(frame: CGRect, cornerRadius: CGFloat) -> CALayer {
+        let gradient = CAGradientLayer()
+        gradient.frame = frame
+        gradient.locations = [0.0, 0.1, 0.3]
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradient.startPoint = CGPoint(x:0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.cornerRadius = cornerRadius
+        gradient.masksToBounds = true
+        
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0.0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
+        return gradient
+    }
+    
+    private func showSkeleton() {
+        view.layoutIfNeeded()
+        let avatarGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 70, height: 70)), cornerRadius: 35)
+        animationLayers.insert(avatarGradient)
+        avatarImageView?.layer.addSublayer(avatarGradient)
+        
+        let nameLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: , height: )), cornerRadius: )
+    }
     
     private func updateProfileDetails(profile: Profile) {
         nameLabel?.text = profile.name.isEmpty
