@@ -33,8 +33,11 @@ final class ProfileLogoutService {
       }
    }
     private func switchToSplashViewController() {
-        guard let window = UIApplication.shared.windows.first else { return }
-        let splashViewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "SplashViewController")
+        guard let window = UIApplication.shared.connectedScenes
+            .compactMap({$0 as? UIWindowScene})
+            .flatMap({$0.windows})
+            .first(where: {$0.isKeyWindow}) else {return}
+        let splashViewController = SplashViewController()
         window.rootViewController = splashViewController
     }
 }

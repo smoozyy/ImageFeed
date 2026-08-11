@@ -109,7 +109,7 @@ extension ImagesListViewController {
         cell.cellImageView.kf.indicatorType = .activity
         cell.cellImageView.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "stub")
+            placeholder: UIImage(resource: .stub)
         )
         
         cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
@@ -143,8 +143,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-            guard let self else {return}
             UIBlockingProgressHUD.dismiss()
+            guard let self else {return}
             switch result {
             case .success:
                 self.photos = self.imagesListService.photos

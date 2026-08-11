@@ -29,16 +29,16 @@ struct PhotoResult: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case urls
-        case id = "id"
+        case id
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case width = "width"
-        case height = "height"
-        case color = "color"
+        case width
+        case height
+        case color
         case blurHash = "blur_hash"
-        case likes = "likes"
+        case likes
         case likedByUser = "liked_by_user"
-        case description = "description"
+        case description
     }
 }
 
@@ -50,11 +50,11 @@ struct UrlsResult: Decodable {
     let thumb: String
     
     enum CodingKeys: String, CodingKey {
-        case raw = "raw"
-        case full = "full"
-        case regular = "regular"
-        case small = "small"
-        case thumb = "thumb"
+        case raw
+        case full
+        case regular
+        case small
+        case thumb 
     }
 }
 
@@ -70,7 +70,7 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private(set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
-    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     private var task: URLSessionTask?
     
     //...
@@ -170,11 +170,7 @@ final class ImagesListService {
             return nil
         }
         var request = URLRequest(url: url)
-        if isLike == true {
-            request.httpMethod = "POST"
-        } else {
-            request.httpMethod = "DELETE"
-        }
+        request.httpMethod = isLike ? "POST" : "DELETE"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

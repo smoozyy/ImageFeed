@@ -35,7 +35,7 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(didTapButton)
         )
-        
+        view.backgroundColor = .ypBlackIOS
         exitButton.tintColor = .red
         nameLabel.textColor = .ypWhiteIOS
         profileLabel.textColor = .ypGrayIOS
