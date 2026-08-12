@@ -1,23 +1,19 @@
 import UIKit
+import Kingfisher
+
 
 final class SingleImageViewController: UIViewController {
     
     //MARK: Outlets
+    
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
     
     //MARK: Properties
     
-    var image: UIImage? {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            if let unwrappedImage = image {
-                rescaleAndCenterImageInScrollView(image: unwrappedImage)
-            }
-        }
-    }
+    private var isImageLoaded: Bool = false
+    var imageURL: URL?
     
     //MARK: Actions
     
@@ -26,7 +22,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction func didTapShareButton(_ sender: UIButton) {
-        guard let unwrappedImage = image else {
+        guard let unwrappedImage = imageView.image else {
             print("Image is nil, cannot share")
             return
         }
@@ -52,32 +48,62 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        if let unwrappedImage = image {
-            imageView.frame.size = unwrappedImage.size
-            rescaleAndCenterImageInScrollView(image: unwrappedImage)
-        }
+
         scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        scrollView.maximumZoomScale = 3.0
+        
+        scrollView.delegate = self
+        loadImage()
     }
     
     //MARK: Private methods
     
-    private func rescaleAndCenterImageInScrollView(image: UIImage) {
-        let minZoomScale = scrollView.minimumZoomScale
-        let maxZoomScale = scrollView.maximumZoomScale
-        view.layoutIfNeeded()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard isImageLoaded,
+                let image = imageView.image else { return }
         let visibleRectSize = scrollView.bounds.size
         let imageSize = image.size
         let hScale = visibleRectSize.width / imageSize.width
         let vScale = visibleRectSize.height / imageSize.height
-        let scale = min(maxZoomScale, max(minZoomScale, min(hScale, vScale)))
-        scrollView.setZoomScale(scale, animated: false)
-        scrollView.layoutIfNeeded()
-        let newContentSize = scrollView.contentSize
-        let x = (newContentSize.width - visibleRectSize.width) / 2
-        let y = (newContentSize.height - visibleRectSize.height) / 2
-        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+        let scale = min(hScale, vScale)
+        let finalScale = max(scrollView.minimumZoomScale, min(scrollView.maximumZoomScale, scale))
+        scrollView.setZoomScale(finalScale, animated: false)
+        let newContentsSize = scrollView.contentSize
+        let x = (newContentsSize.width - visibleRectSize.width ) / 2
+        let y = (newContentsSize.height - visibleRectSize.height) / 2
+        scrollView.setContentOffset(CGPoint(x:x,y:y), animated: false)
+    }
+    
+    private func loadImage () {
+        guard let imageURL else {return}
+        UIBlockingProgressHUD.show()
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(
+            with: imageURL
+        ) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self else {return}
+            switch result {
+            case .success:
+                self.isImageLoaded = true
+            case .failure(let error):
+                print("[SingleImageViewController.loadImage] Error: \(error.localizedDescription)")
+                self.showErrorAlert()
+            }
+        }
+    }
+    
+    private func showErrorAlert() {
+        let alert = UIAlertController(title: "Что-то пошло не так", message: "Попробовать ещё раз?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self else {return}
+            self.loadImage()
+        }
+        alert.addAction(okAction)
+        alert.addAction(retryAction)
+        self.present(alert, animated: true)
     }
 }
 

@@ -26,11 +26,14 @@ extension URLSession {
                 if 200 ..< 300 ~= statusCode {
                     fulfillCompletionOnTheMainThread(.success(data)) // 3
                 } else {
+                    print("[URLSession.data]: Network error - HTTP status code: \(statusCode)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode))) // 4
                 }
             } else if let error = error {
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error))) // 5
+                print("[URLSession.data]: Network error - URLRequest error: \(error.localizedDescription)")
             } else {
+                print("[URLSession.data]: URLSession unknown error")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError)) // 6
             }
         })
@@ -50,14 +53,14 @@ extension URLSession {
                         completion(.success(decodedObject))
                     } catch {
                         if let decodingError = error as? DecodingError {
-                            print("Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                            print("[URLSession.objectTask]: DecodingError: \(decodingError), Data: \(String(data: data, encoding: .utf8) ?? "")")
                         } else {
-                            print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                            print("[URLSession.objectTask]: DecodinError: \(error.localizedDescription), Data: \(String(data: data, encoding: .utf8) ?? "")")
                         }
                         completion(.failure(error))
                     }
                 case .failure(let error):
-                    print("Ошибка запроса: \(error.localizedDescription)")
+                    print("[URLSession.objectTask] NetworkError: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }

@@ -10,6 +10,7 @@ final class ProfileViewController: UIViewController {
     private var profileLabel: UILabel?
     private var descriptionLabel: UILabel?
     private let profileService = ProfileService.shared
+    private var profileLogoutService = ProfileLogoutService.shared
     
     //MARK: viewDidLoad
     
@@ -24,7 +25,7 @@ final class ProfileViewController: UIViewController {
             guard let self else {return}
             self.updateAvatar()
         }
-            
+        
         let nameLabel = UILabel()
         let profileLabel = UILabel()
         let descriptionLabel = UILabel()
@@ -34,7 +35,7 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(didTapButton)
         )
-        
+        view.backgroundColor = .ypBlackIOS
         exitButton.tintColor = .red
         nameLabel.textColor = .ypWhiteIOS
         profileLabel.textColor = .ypGrayIOS
@@ -100,14 +101,14 @@ final class ProfileViewController: UIViewController {
     
     private func updateProfileDetails(profile: Profile) {
         nameLabel?.text = profile.name.isEmpty
-            ? "Имя не указано"
-            : profile.name
+        ? "Имя не указано"
+        : profile.name
         profileLabel?.text = profile.loginName.isEmpty
-            ? "@неизвестный_пользователь"
-            : profile.loginName
+        ? "@неизвестный_пользователь"
+        : profile.loginName
         descriptionLabel?.text = (profile.bio?.isEmpty ?? true)
-            ? "Профиль не заполнен"
-            : profile.bio
+        ? "Профиль не заполнен"
+        : profile.bio
     }
     
     private func updateAvatar() {
@@ -149,9 +150,16 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func didTapButton() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert)
+        let noAction = UIAlertAction(title: "Нет", style: .default)
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            self.profileLogoutService.logout()
+        }
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
     }
-    
-    
-    
-    
 }

@@ -55,6 +55,9 @@
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="like"/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked" destination="KXL-OY-29V" eventType="touchUpInside" id="Pjb-CX-WUi"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" name="YP Black (iOS)"/>
