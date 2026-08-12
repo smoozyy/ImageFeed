@@ -49,6 +49,8 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         exitButton.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.clipsToBounds = true
         view.addSubview(exitButton)
         view.addSubview(avatarImageView)
         view.addSubview(nameLabel)
@@ -81,11 +83,13 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
             
         ])
-        
+                
         self.avatarImageView = avatarImageView
         self.nameLabel = nameLabel
         self.profileLabel = profileLabel
         self.descriptionLabel = descriptionLabel
+        
+        showSkeleton()
         
         if let profile = profileService.profile {
             updateProfileDetails(profile: profile)
@@ -129,7 +133,22 @@ final class ProfileViewController: UIViewController {
         animationLayers.insert(avatarGradient)
         avatarImageView?.layer.addSublayer(avatarGradient)
         
-        let nameLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: , height: )), cornerRadius: )
+        let nameLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 200 , height: 30 )), cornerRadius: 9 )
+        animationLayers.insert(nameLabelGradient)
+        nameLabel?.layer.addSublayer(nameLabelGradient)
+        
+        let profileLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 20)), cornerRadius: 9)
+        animationLayers.insert(profileLabelGradient)
+        profileLabel?.layer.addSublayer(profileLabelGradient)
+        
+        let descriptionLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 150, height: 20)), cornerRadius: 9)
+        animationLayers.insert(descriptionLabelGradient)
+        descriptionLabel?.layer.addSublayer(descriptionLabelGradient)
+    }
+    
+    private func removeSkeleton() {
+        animationLayers.forEach { $0.removeFromSuperlayer() }
+        animationLayers.removeAll()
     }
     
     private func updateProfileDetails(profile: Profile) {
@@ -154,12 +173,11 @@ final class ProfileViewController: UIViewController {
         
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .medium))
         
         
         
         let proccessor = RoundCornerImageProcessor(cornerRadius: 35)
-        avatarImageView?.kf.indicatorType = .activity
         avatarImageView?.kf.setImage(
             with: url,
             placeholder: placeholderImage,
@@ -169,6 +187,7 @@ final class ProfileViewController: UIViewController {
                 .cacheOriginalImage, /// кэшируем изображение
                 .forceRefresh /// игнорируем кэш, чтобы обновить
             ]) { result in
+                self.removeSkeleton()
                 switch result {
                 case .success(let value):
                     print(value.image)
