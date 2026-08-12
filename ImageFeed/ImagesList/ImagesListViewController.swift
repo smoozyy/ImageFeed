@@ -38,7 +38,7 @@ final class ImagesListViewController: UIViewController {
     }
     
     //MARK: Methods
-    
+        
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         if segue.identifier == showSingleImageSegueIdentifier {
             guard
@@ -106,11 +106,13 @@ extension ImagesListViewController {
         let photo = photos[indexPath.row]
         
         guard let url = URL(string: photo.thumbImageURL) else { return }
-        cell.cellImageView.kf.indicatorType = .activity
+        cell.showSkeleton()
         cell.cellImageView.kf.setImage(
             with: url,
             placeholder: UIImage(named: "stub")
-        )
+        ) { [weak cell] result in
+            cell?.removeSkeleton()
+        }
         
         cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
         let likeImage = UIImage(named: "like_button_\(photo.isLiked ? "on" : "off")")

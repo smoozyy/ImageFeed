@@ -129,21 +129,27 @@ final class ProfileViewController: UIViewController {
     
     private func showSkeleton() {
         view.layoutIfNeeded()
-        let avatarGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 70, height: 70)), cornerRadius: 35)
+        guard
+            let avatarImageView = avatarImageView,
+            let nameLabel = nameLabel,
+            let profileLabel = profileLabel,
+            let descriptionLabel = descriptionLabel
+        else {return}
+        let avatarGradient = createGradientLayer(frame: avatarImageView.bounds, cornerRadius: 35)
         animationLayers.insert(avatarGradient)
-        avatarImageView?.layer.addSublayer(avatarGradient)
+        avatarImageView.layer.addSublayer(avatarGradient)
         
         let nameLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 200 , height: 30 )), cornerRadius: 9 )
         animationLayers.insert(nameLabelGradient)
-        nameLabel?.layer.addSublayer(nameLabelGradient)
+        nameLabel.layer.addSublayer(nameLabelGradient)
         
         let profileLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 20)), cornerRadius: 9)
         animationLayers.insert(profileLabelGradient)
-        profileLabel?.layer.addSublayer(profileLabelGradient)
+        profileLabel.layer.addSublayer(profileLabelGradient)
         
-        let descriptionLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 150, height: 20)), cornerRadius: 9)
+        let descriptionLabelGradient = createGradientLayer(frame: CGRect(origin: .zero, size: CGSize(width: 150, height: 22)), cornerRadius: 9)
         animationLayers.insert(descriptionLabelGradient)
-        descriptionLabel?.layer.addSublayer(descriptionLabelGradient)
+        descriptionLabel.layer.addSublayer(descriptionLabelGradient)
     }
     
     private func removeSkeleton() {
@@ -187,7 +193,7 @@ final class ProfileViewController: UIViewController {
                 .cacheOriginalImage, /// кэшируем изображение
                 .forceRefresh /// игнорируем кэш, чтобы обновить
             ]) { result in
-                self.removeSkeleton()
+                //self.removeSkeleton()
                 switch result {
                 case .success(let value):
                     print(value.image)
