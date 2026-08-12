@@ -193,7 +193,7 @@ final class ProfileViewController: UIViewController {
                 .cacheOriginalImage, /// кэшируем изображение
                 .forceRefresh /// игнорируем кэш, чтобы обновить
             ]) { result in
-                //self.removeSkeleton()
+                self.removeSkeleton()
                 switch result {
                 case .success(let value):
                     print(value.image)
