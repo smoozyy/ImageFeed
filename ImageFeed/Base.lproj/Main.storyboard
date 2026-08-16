@@ -106,10 +106,10 @@
             </objects>
             <point key="canvasLocation" x="-2350" y="702"/>
         </scene>
-        <!--Web View View Controller-->
+        <!--WebViewViewController-->
         <scene sceneID="GYx-ZI-7fo">
             <objects>
-                <viewController id="cjF-OX-UaN" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="cjF-OX-UaN" userLabel="WebViewViewController" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9fF-b1-OHR">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
