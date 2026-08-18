@@ -1,6 +1,10 @@
 import UIKit
 import Kingfisher
 
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListViewControllerPresenter? { get set }
+}
+
 final class ImagesListViewController: UIViewController {
     //MARK: Outlets
     
