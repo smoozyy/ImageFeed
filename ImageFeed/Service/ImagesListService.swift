@@ -4,7 +4,7 @@ struct LikeResultWrapper: Decodable {
     let photo: PhotoResult
 }
 
-struct Photo {
+public struct Photo {
     let id: String
     let size: CGSize
     let createdAt: Date?
