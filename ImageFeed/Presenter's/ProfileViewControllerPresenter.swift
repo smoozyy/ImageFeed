@@ -14,7 +14,7 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
     private let profileService = ProfileService.shared
     private var profileLogoutService = ProfileLogoutService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-
+    
     //MARK: Public Method's
     func viewDidLoad() {
         setupAvatarObserver()
@@ -63,5 +63,5 @@ final class ProfileViewControllerPresenter: ProfileViewControllerPresenterProtoc
         
         view?.updateAvatar(with: url)
     }
-
+    
 }

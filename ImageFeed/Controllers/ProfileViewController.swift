@@ -79,7 +79,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
             
         ])
-                
+        
         self.avatarImageView = avatarImageView
         self.nameLabel = nameLabel
         self.profileLabel = profileLabel
@@ -151,7 +151,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         animationLayers.forEach { $0.removeFromSuperlayer() }
         animationLayers.removeAll()
     }
-
+    
     func updateProfileDetails(name: String, login: String, bio: String) {
         nameLabel?.text = name
         profileLabel?.text = login
@@ -162,7 +162,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let placeHolder = makeAvatarPlaceholder()
         let processor = makeAvatarProcessor()
         setAvatarImage(from: url, placeholder: placeHolder, processor: processor)
-
+        
     }
     
     private func makeAvatarPlaceholder() -> UIImage? {
