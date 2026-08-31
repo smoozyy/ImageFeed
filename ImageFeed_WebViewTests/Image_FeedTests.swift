@@ -5,67 +5,67 @@ import XCTest
 final class Image_FeedTests: XCTestCase {
     
     func testViewControllerCallsViewDidLoad() {
-        //given
+        //Given
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "WebViewViewController") as! WebViewViewController
         let presenter = WebViewPresenterSpy()
         viewController.presenter = presenter
         presenter.view = viewController
         
-        //when
+        //When
         _ = viewController.view
         
-        //then
+        //Then
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
     func testPresenterCallsLoadRequest() {
-        //given
+        //Given
         let viewControllerSpy = WebViewViewControllerSpy()
         let authHelper = AuthHelper()
         let presenter = WebViewPresenter(authHelper: authHelper)
         viewControllerSpy.presenter = presenter
         presenter.view = viewControllerSpy
         
-        //when
+        //When
         presenter.viewDidLoad()
         
-        //then
+        //Then
         XCTAssertTrue(viewControllerSpy.loadRequestCalled)
     }
     
     func testProgressVisibleWhenLessThenOne() {
-        //given
+        //Given
         let authHelper = AuthHelper()
         let presenter = WebViewPresenter(authHelper: authHelper)
         let progress: Float = 0.6
         
-        //when
+        //When
         let shouldHideProgress = presenter.shouldHideProgress(for: progress)
         
-        //then
+        //Then
         XCTAssertFalse(shouldHideProgress)
     }
     
     func testProgressHiddenWhenOne() {
-        //given
+        //Given
         let authHelper = AuthHelper()
         let presenter = WebViewPresenter(authHelper: authHelper)
         let progress: Float = 1.0
         
-        //when
+        //When
         let shouldHideProgress = presenter.shouldHideProgress(for: progress)
         
-        //then
+        //Then
         XCTAssertTrue(shouldHideProgress)
     }
     
     func testAuthHelperAuthURL() {
-        //given
+        //Given
         let configuration = AuthConfiguration.standard
         let authHelper = AuthHelper(configuration: configuration)
         
-        //when
+        //When
         let url = authHelper.authURL()
 
         guard let urlString = url?.absoluteString else {
@@ -73,7 +73,7 @@ final class Image_FeedTests: XCTestCase {
             return
         }
 
-        //then
+        //Then
         XCTAssertTrue(urlString.contains(configuration.authURLString))
         XCTAssertTrue(urlString.contains(configuration.accessKey))
         XCTAssertTrue(urlString.contains(configuration.redirectURI))
@@ -82,7 +82,7 @@ final class Image_FeedTests: XCTestCase {
     }
     
     func testCodeFromURL() {
-        //given
+        //Given
         guard var uRLComponents = URLComponents(string: "https://unsplash.com/oauth/authorize/native") else {
             return
         }
@@ -94,10 +94,10 @@ final class Image_FeedTests: XCTestCase {
         }
         let authHelper = AuthHelper()
         
-        //when
+        //When
         let code = authHelper.code(from: url)
         
-        //then
+        //Then
         XCTAssertEqual(code, "test code")
     }
 }

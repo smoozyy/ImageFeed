@@ -69,7 +69,7 @@ final class ImagesListViewControllerPresenter: ImagesListViewControllerPresenter
         return dateFormatter.string(from: date)
     }
     
-    //MARK: Private method's
+    //MARK: Private methods
     
     private func setupImagesObserver() {
         imagesListObserver = NotificationCenter.default.addObserver(

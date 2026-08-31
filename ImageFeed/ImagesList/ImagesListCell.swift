@@ -29,7 +29,7 @@ final class ImagesListCell: UITableViewCell {
         removeSkeleton()
     }
     
-    //MARK: Skeleton method's
+    //MARK: Skeleton methods
     
     func showSkeleton() {
         layoutIfNeeded()

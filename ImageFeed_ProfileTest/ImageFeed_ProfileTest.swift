@@ -4,29 +4,39 @@ import XCTest
 @MainActor
 final class ImageFeed_ProfileTest: XCTestCase {
     
-    func testViewControllerCallsViewDidLoad() {
-        //given
+    private func makeSUT() -> (
+        viewController: ProfileViewController,
+        presenter: ProfilePresenterSpy
+    ) {
         let viewController = ProfileViewController()
         let presenter = ProfilePresenterSpy()
+        
         viewController.presenter = presenter
         presenter.view = viewController
         
-        //when
+        return (viewController, presenter)
+    }
+    
+    func testViewControllerCallsViewDidLoad() {
+        //Given
+        let (viewController, presenter) = makeSUT()
+        
+        //When
         _ = viewController.view
         
-        //then
+        //Then
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }
 
     func testPresenterAssignViewCorrectly() {
-        //given
+        //Given
         let viewControllerSpy = ProfileViewControllerSpy()
         let presenter = ProfileViewControllerPresenter()
         
-        //when
+        //When
         viewControllerSpy.presenter = presenter
         
-        //then
+        //Then
         XCTAssertNotNil(presenter.view)
         
     }

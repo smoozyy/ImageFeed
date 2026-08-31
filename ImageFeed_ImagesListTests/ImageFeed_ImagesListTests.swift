@@ -4,41 +4,51 @@ import XCTest
 @MainActor
 final class ImageFeed_ImagesListTests: XCTestCase {
     
-    func testViewControllerCallsViewDidLoad() {
-        //given
+    private func makeSUT() -> (
+        viewController: ImagesListViewController,
+        presenter: ImagesListPresenterSpy
+    ) {
         let viewController = ImagesListViewController()
         let presenter = ImagesListPresenterSpy()
+        
         viewController.presenter = presenter
         presenter.view = viewController
         
-        //when
+        return (viewController, presenter)
+    }
+    
+    func testViewControllerCallsViewDidLoad() {
+        //Given
+        let (viewController, presenter) = makeSUT()
+        
+        //When
         _ = viewController.view
         
-        //then
+        //Then
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
     func testPresenterAssignsViewCorrectly() {
-        //given
+        //Given
         let viewControllerSpy = ImagesListViewControllerSpy()
         let presenter = ImagesListViewControllerPresenter()
         
-        //when
+        //When
         viewControllerSpy.presenter = presenter
         presenter.view = viewControllerSpy
         
-        //then
+        //Then
         XCTAssertNotNil(presenter.view)
     }
     
     func testPresenterFetchNextPageIfNeeded() {
-        //given
+        //Given
         let presenter = ImagesListPresenterSpy()
         
-        //when
+        //When
         presenter.fetchNextPageIfNeeded(forRowAt: 0)
         
-        //then
+        //Then
         XCTAssertTrue(presenter.fectchNextPageCalled)
     }
 }
