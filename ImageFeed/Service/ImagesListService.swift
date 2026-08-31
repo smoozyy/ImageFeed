@@ -4,7 +4,7 @@ struct LikeResultWrapper: Decodable {
     let photo: PhotoResult
 }
 
-struct Photo {
+public struct Photo {
     let id: String
     let size: CGSize
     let createdAt: Date?
@@ -75,7 +75,7 @@ final class ImagesListService {
     
     //...
     
-    //MARK: Private Method's
+    //MARK: Private Methods
     
     func makePhotosRequest(page: Int, token: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {

@@ -1,16 +1,20 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewControllerPresenterProtocol? { get set }
+    func updateAvatar(with url: URL)
+    func updateProfileDetails(name: String, login: String, bio: String)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     
     //MARK: Propetries
+    var presenter: ProfileViewControllerPresenterProtocol?
     private var avatarImageView: UIImageView?
-    private var profileImageServiceObserver: NSObjectProtocol?
     private var nameLabel: UILabel?
     private var profileLabel: UILabel?
     private var descriptionLabel: UILabel?
-    private let profileService = ProfileService.shared
-    private var profileLogoutService = ProfileLogoutService.shared
     private var animationLayers = Set<CALayer>()
     
     //MARK: viewDidLoad
@@ -18,14 +22,6 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main,
-        ) { [weak self] _ in
-            guard let self else {return}
-            self.updateAvatar()
-        }
         
         let nameLabel = UILabel()
         let profileLabel = UILabel()
@@ -83,7 +79,7 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
             
         ])
-                
+        
         self.avatarImageView = avatarImageView
         self.nameLabel = nameLabel
         self.profileLabel = profileLabel
@@ -91,19 +87,18 @@ final class ProfileViewController: UIViewController {
         
         showSkeleton()
         
-        if let profile = profileService.profile {
-            updateProfileDetails(profile: profile)
+        if presenter == nil {
+            let presenter = ProfileViewControllerPresenter()
+            presenter.view = self
+            self.presenter = presenter
         }
-        
-        updateAvatar()
-        
+        presenter?.viewDidLoad()
     }
     
     
     
     
     //MARK: Private Methods
-    
     private func createGradientLayer(frame: CGRect, cornerRadius: CGFloat) -> CALayer {
         let gradient = CAGradientLayer()
         gradient.frame = frame
@@ -157,54 +152,42 @@ final class ProfileViewController: UIViewController {
         animationLayers.removeAll()
     }
     
-    private func updateProfileDetails(profile: Profile) {
-        nameLabel?.text = profile.name.isEmpty
-        ? "Имя не указано"
-        : profile.name
-        profileLabel?.text = profile.loginName.isEmpty
-        ? "@неизвестный_пользователь"
-        : profile.loginName
-        descriptionLabel?.text = (profile.bio?.isEmpty ?? true)
-        ? "Профиль не заполнен"
-        : profile.bio
+    func updateProfileDetails(name: String, login: String, bio: String) {
+        nameLabel?.text = name
+        profileLabel?.text = login
+        descriptionLabel?.text = bio
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else {return}
+    func updateAvatar(with url: URL) {
+        let placeHolder = makeAvatarPlaceholder()
+        let processor = makeAvatarProcessor()
+        setAvatarImage(from: url, placeholder: placeHolder, processor: processor)
         
-        print("imageURL: \(url)")
-        
-        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+    }
+    
+    private func makeAvatarPlaceholder() -> UIImage? {
+        return UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .medium))
-        
-        
-        
-        let proccessor = RoundCornerImageProcessor(cornerRadius: 35)
+    }
+    
+    private func makeAvatarProcessor() -> ImageProcessor {
+        return RoundCornerImageProcessor(cornerRadius: 35)
+    }
+    
+    private func setAvatarImage(from url: URL, placeholder: UIImage?, processor: ImageProcessor) {
         avatarImageView?.kf.setImage(
             with: url,
-            placeholder: placeholderImage,
+            placeholder: placeholder,
             options: [
-                .processor(proccessor),
-                .scaleFactor(UIScreen.main.scale), /// учитываем масштаб экрана
-                .cacheOriginalImage, /// кэшируем изображение
-                .forceRefresh /// игнорируем кэш, чтобы обновить
-            ]) { result in
-                self.removeSkeleton()
-                switch result {
-                case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        
-        
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ]
+        ) { [weak self] _ in
+            self?.removeSkeleton()
+        }
     }
     
     @objc private func didTapButton() {
@@ -213,11 +196,13 @@ final class ProfileViewController: UIViewController {
             message: "Уверены, что хотите выйти?",
             preferredStyle: .alert)
         let noAction = UIAlertAction(title: "Нет", style: .default)
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            self.profileLogoutService.logout()
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self else {return}
+            self.presenter?.didTapLogout()
         }
         alert.addAction(yesAction)
         alert.addAction(noAction)
         present(alert, animated: true)
     }
+    
 }

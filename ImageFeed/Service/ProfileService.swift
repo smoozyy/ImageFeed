@@ -33,7 +33,7 @@ final class ProfileService {
     private let urlSession = URLSession.shared
     private(set) var profile: Profile?
     
-    //MARK: Method's
+    //MARK: Methods
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         task?.cancel()
